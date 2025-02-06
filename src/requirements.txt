@@ -1,0 +1,5 @@
+Faker==33.3.0
+kafka-python==2.0.2
+python-dateutil==2.9.0.post0
+six==1.17.0
+text-unidecode==1.3

@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-producer
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka-producer
+  template:
+    metadata:
+      labels:
+        app: kafka-producer
+    spec:
+      containers:
+      - name: kafka-producer
+        image: keda-app:1.0
+        imagePullPolicy: Never
+        command: ["python"]
+        args: ["producer.py"]
+        env:
+        - name: BOOTSTRAP_SERVER
+          value: "192.168.31.125:9092"
+        - name: TOPIC_NAME
+          value: "keda-test"
+        - name: WAIT_TIME
+          value: "1"

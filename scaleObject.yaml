@@ -1,0 +1,20 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: kafka-scaledobject
+  namespace: default
+spec:
+  scaleTargetRef:
+    name: kafka-consumer
+  minReplicaCount: 1
+  maxReplicaCount: 5
+  pollingInterval: 5
+  cooldownPeriod: 60
+  triggers:
+  - type: kafka
+    metadata:
+      bootstrapServers: 192.168.31.125:9092
+      consumerGroup: consumer-group-a    # Make sure that this consumer group name is the same one as the one that is consuming topics
+      topic: keda-test
+      lagThreshold: "5"
+      offsetResetPolicy: latest
