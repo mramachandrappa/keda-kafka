@@ -1,6 +1,6 @@
 from kafka import KafkaProducer
 import json
-from data import get_registered_user
+from faker_data import generate_user_data
 import time
 import os
 
@@ -17,7 +17,7 @@ producer = KafkaProducer(bootstrap_servers=[BOOTSTRAP_SERVER],
 
 if __name__ == "__main__":
     while 1 == 1:
-        user_event = get_registered_user()
+        user_event = generate_user_data()
         print(user_event)
         producer.send(TOPIC_NAME, user_event)
         time.sleep(SLEEP_TIME)
