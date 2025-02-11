@@ -6,10 +6,29 @@ metadata:
 spec:
   scaleTargetRef:
     name: kafka-consumer
-  minReplicaCount: 1
+  minReplicaCount: 0
   maxReplicaCount: 5
   pollingInterval: 5
   cooldownPeriod: 60
+  advanced:                                                 # Optional. Section to specify advanced options
+    restoreToOriginalReplicaCount: true                     # Optional. Default: false
+    horizontalPodAutoscalerConfig:                          # Optional. Section to specify HPA related options
+      name: kafka-consumer
+      behavior:
+        scaleUp:
+          stabilizationWindowSeconds: 300   # Wait 5 minutes before scaling up again
+          selectPolicy: Max
+          policies:
+            - type: Pods
+              value: 1      # Scale up by 4 pods at most
+              periodSeconds: 60   # Scale up can happen at most once per minute
+        scaleDown:
+          stabilizationWindowSeconds: 300   # Wait 5 minutes before scaling down again
+          selectPolicy: Min
+          policies:
+            - type: Pods
+              value: 1      # Scale down by 2 pods at most
+              periodSeconds: 60   # Scale down can happen at most once per minute
   triggers:
   - type: kafka
     metadata:
