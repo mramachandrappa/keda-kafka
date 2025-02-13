@@ -3,10 +3,10 @@ import json
 import time
 import os
 
-BOOTSTRAP_SERVER = os.environ['BOOTSTRAP_SERVER']
-CONSUMER_GROUP_ID = os.environ['CONSUMER_GROUP_ID']
-TOPIC_NAME = os.environ['TOPIC_NAME']
-SLEEP_TIME = int(os.environ['WAIT_TIME'])
+BOOTSTRAP_SERVER = "192.168.31.125:9092" #os.environ['BOOTSTRAP_SERVER']
+CONSUMER_GROUP_ID = "consumer-group-a" #os.environ['CONSUMER_GROUP_ID']
+TOPIC_NAME = "keda-test" #os.environ['TOPIC_NAME']
+SLEEP_TIME = 2 #int(os.environ['WAIT_TIME'])
 
 if __name__ == "__main__":
     consumer = KafkaConsumer(

@@ -6,34 +6,39 @@ metadata:
 spec:
   scaleTargetRef:
     name: kafka-consumer
-  minReplicaCount: 0
-  maxReplicaCount: 5
-  pollingInterval: 5
-  cooldownPeriod: 60
+  fallback:
+    failureThreshold: 3                                     # Number of consecutive failures to trigger fallback
+    replicas: 1                                             # Number of replicas to scale to during fallback
+  minReplicaCount: 0                                        # Scale from 0<->1 as per activationLagThreshold set under kafka trigger
+  maxReplicaCount: 5                                        # Max replicas to scale. With Kafka trigger it can scale up to no. of partitions.
+  pollingInterval: 10                                       # How frequently KEDA should poll kafka for consumerLag metric.  
+  cooldownPeriod: 60                                       # Effective for scaling pods from/to 0 only. Number of seconds to wait. 
   advanced:                                                 # Optional. Section to specify advanced options
     restoreToOriginalReplicaCount: true                     # Optional. Default: false
     horizontalPodAutoscalerConfig:                          # Optional. Section to specify HPA related options
       name: kafka-consumer
       behavior:
         scaleUp:
-          stabilizationWindowSeconds: 300   # Wait 5 minutes before scaling up again
+          stabilizationWindowSeconds: 60                    # Wait 5 minutes before scaling up again
           selectPolicy: Max
           policies:
             - type: Pods
-              value: 1      # Scale up by 4 pods at most
-              periodSeconds: 60   # Scale up can happen at most once per minute
+              value: 1                                      # Scale up by 1 pods at most
+              periodSeconds: 60                             # Scale up can happen at most once per minute
         scaleDown:
-          stabilizationWindowSeconds: 300   # Wait 5 minutes before scaling down again
+          stabilizationWindowSeconds: 60                    # Wait 5 minutes before scaling down again
           selectPolicy: Min
           policies:
             - type: Pods
-              value: 1      # Scale down by 2 pods at most
-              periodSeconds: 60   # Scale down can happen at most once per minute
+              value: 1                                      # Scale down by 2 pods at most
+              periodSeconds: 60                             # Scale down can happen at most once per minute
   triggers:
   - type: kafka
+    name: metric1
     metadata:
       bootstrapServers: 192.168.31.125:9092
-      consumerGroup: consumer-group-a    # Make sure that this consumer group name is the same one as the one that is consuming topics
+      consumerGroup: consumer-group-a                       # Make sure that this consumer group name is the same one as the one that is consuming topics
       topic: keda-test
       lagThreshold: "5"
+      activationLagThreshold: "0"                         # Default is 0.
       offsetResetPolicy: latest

@@ -4,9 +4,9 @@ from faker_data import generate_user_data
 import time
 import os
 
-BOOTSTRAP_SERVER = os.environ['BOOTSTRAP_SERVER']
-TOPIC_NAME = os.environ['TOPIC_NAME']
-SLEEP_TIME = int(os.environ['WAIT_TIME'])
+BOOTSTRAP_SERVER = "192.168.31.125:9092" #os.environ['BOOTSTRAP_SERVER']
+TOPIC_NAME = "keda-test" #os.environ['TOPIC_NAME']
+SLEEP_TIME = 1 #int(os.environ['WAIT_TIME'])
 
 def json_serializer(data):
     return json.dumps(data).encode("utf-8")
