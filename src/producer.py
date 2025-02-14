@@ -16,7 +16,7 @@ producer = KafkaProducer(bootstrap_servers=[BOOTSTRAP_SERVER],
                          value_serializer=json_serializer)
 
 if __name__ == "__main__":
-    while 1 == 1:
+    while True:
         user_event = generate_user_data()
         print(user_event)
         producer.send(TOPIC_NAME, user_event)

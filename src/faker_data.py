@@ -10,6 +10,4 @@ def generate_user_data():
         "created_at": fake.year()
     }
 
-
-if __name__ == "__main__":
-    print(generate_user_data())
+print(generate_user_data())

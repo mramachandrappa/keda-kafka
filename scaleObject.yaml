@@ -12,7 +12,7 @@ spec:
   minReplicaCount: 0                                        # Scale from 0<->1 as per activationLagThreshold set under kafka trigger
   maxReplicaCount: 5                                        # Max replicas to scale. With Kafka trigger it can scale up to no. of partitions.
   pollingInterval: 10                                       # How frequently KEDA should poll kafka for consumerLag metric.  
-  cooldownPeriod: 60                                       # Effective for scaling pods from/to 0 only. Number of seconds to wait. 
+  cooldownPeriod: 60                                        # Effective for scaling pods from/to 0 only. Number of seconds to wait. 
   advanced:                                                 # Optional. Section to specify advanced options
     restoreToOriginalReplicaCount: true                     # Optional. Default: false
     horizontalPodAutoscalerConfig:                          # Optional. Section to specify HPA related options
@@ -23,15 +23,15 @@ spec:
           selectPolicy: Max
           policies:
             - type: Pods
-              value: 1                                      # Scale up by 1 pods at most
-              periodSeconds: 60                             # Scale up can happen at most once per minute
+              value: 1                                      
+              periodSeconds: 60                             # Scale up to most one pod once per minute
         scaleDown:
-          stabilizationWindowSeconds: 60                    # Wait 5 minutes before scaling down again
+          stabilizationWindowSeconds: 60                   # Wait 5 minutes before scaling down again
           selectPolicy: Min
           policies:
             - type: Pods
-              value: 1                                      # Scale down by 2 pods at most
-              periodSeconds: 60                             # Scale down can happen at most once per minute
+              value: 1                                      
+              periodSeconds: 60                             # Scale down to most one pod once per minute
   triggers:
   - type: kafka
     name: metric1
